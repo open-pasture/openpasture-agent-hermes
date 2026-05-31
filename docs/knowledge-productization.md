@@ -7,7 +7,8 @@
 The repository already has the key separation points needed for productization:
 
 - `farm.db` holds farmer-specific operational data.
-- `knowledge.db` holds shared ancestral knowledge.
+- Markdown files under `seed/knowledge/` hold shared ancestral knowledge.
+- `knowledge.db` is a generated runtime/search artifact built from those Markdown files.
 - each `KnowledgeEntry` stores structured source provenance
 - ingestion batches now persist JSON manifests under `knowledge-batches/`
 - the ingestion queue stays separate from the stored knowledge corpus
@@ -18,7 +19,7 @@ That means the knowledge base can become a maintained product artifact without c
 
 Treat the ancestral knowledge base as a curated publisher layer:
 
-- Cody curates practitioner lessons into `knowledge.db`
+- Cody curates practitioner lessons into Markdown files in this repository
 - each release has a version and a changelog
 - farmers receive knowledge updates as a separate artifact from their own farm records
 - farmer-specific notes and observations remain in `farm.db`
@@ -32,8 +33,9 @@ The practical rule is simple:
 
 The first productizable release unit should be:
 
-- `knowledge.db`
+- the checked-in Markdown knowledge corpus
 - a release manifest such as `knowledge-release.json`
+- optionally generated retrieval artifacts such as `knowledge.db` or embedding indexes
 - optional batch manifests for provenance and auditability
 
 The release manifest should eventually include:
@@ -52,10 +54,10 @@ The release manifest should eventually include:
 The clean update path is:
 
 1. Curate new sources into a maintainer knowledge workspace.
-2. Run ingestion batches and review the resulting entries.
+2. Run ingestion batches and review the resulting Markdown entries.
 3. Cut a versioned knowledge release.
-4. Ship the release artifact to self-hosted or hosted users.
-5. Replace or migrate only the publisher `knowledge.db`.
+4. Ship the Markdown corpus and any generated retrieval artifacts to self-hosted or hosted users.
+5. Rebuild or replace only generated publisher knowledge artifacts such as `knowledge.db`.
 6. Leave `farm.db` untouched.
 
 This gives a simple mental model for users:
@@ -94,7 +96,7 @@ The hosted product can distribute the curated knowledge corpus centrally while s
 
 The next implementation steps that would make this fully shippable are:
 
-1. Add export and import commands for `knowledge.db` plus a release manifest.
+1. Add build/import commands that generate `knowledge.db` from Markdown plus a release manifest.
 2. Add a release metadata table to the knowledge store.
 3. Add an optional overlay model so publisher knowledge and farmer-added knowledge can coexist without conflict.
 4. Add signed or checksummed releases so updates are trustworthy.

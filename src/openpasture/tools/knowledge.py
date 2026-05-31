@@ -39,6 +39,9 @@ STORE_LESSON_SCHEMA = {
         "source_title": {"type": "string"},
         "source_kind": {"type": "string"},
         "segment": {"type": "string"},
+        "transcript_repo": {"type": "string"},
+        "transcript_path": {"type": "string"},
+        "transcript_ref": {"type": "string"},
     },
     "required": ["content", "entry_type", "author", "source_url"],
     "additionalProperties": True,
@@ -53,6 +56,9 @@ UPDATE_LESSON_SCHEMA = {
         "source_title": {"type": "string"},
         "source_kind": {"type": "string"},
         "segment": {"type": "string"},
+        "transcript_repo": {"type": "string"},
+        "transcript_path": {"type": "string"},
+        "transcript_ref": {"type": "string"},
         "tags": {"type": "array", "items": {"type": "string"}},
         "category": {"type": "string"},
     },
@@ -186,12 +192,15 @@ def _build_source_record(args: dict[str, object], *, author: str | None = None) 
         source_author=author or require_str(args, "author"),
         source_kind=optional_str(args, "source_kind") or "web",
         segment=optional_str(args, "segment"),
+        transcript_repo=optional_str(args, "transcript_repo"),
+        transcript_path=optional_str(args, "transcript_path"),
+        transcript_ref=optional_str(args, "transcript_ref"),
     )
 
 
 def _dedupe_sources(sources: list[SourceRecord]) -> list[SourceRecord]:
     deduped: list[SourceRecord] = []
-    seen: set[tuple[str, str, str, str, str | None]] = set()
+    seen: set[tuple[str, str, str, str, str | None, str | None, str | None, str | None]] = set()
     for source in sources:
         key = (
             source.source_url,
@@ -199,6 +208,9 @@ def _dedupe_sources(sources: list[SourceRecord]) -> list[SourceRecord]:
             source.source_author,
             source.source_kind,
             source.segment,
+            source.transcript_repo,
+            source.transcript_path,
+            source.transcript_ref,
         )
         if key in seen:
             continue
@@ -268,7 +280,11 @@ def _require_source_payloads(args: dict[str, object]) -> list[dict[str, object]]
 
 
 def handle_store_lesson(args: dict[str, object]) -> str:
-    """Store one distilled lesson in the ancestral knowledge base."""
+    """Store one distilled lesson in the runtime knowledge index.
+
+    Curated ancestral lessons should also be committed as Markdown under
+    seed/knowledge/. Runtime stores are generated retrieval artifacts.
+    """
     entry = KnowledgeEntry(
         id=make_id("knowledge"),
         farm_id=None,
@@ -286,7 +302,7 @@ def handle_store_lesson(args: dict[str, object]) -> str:
 
 
 def handle_update_lesson(args: dict[str, object]) -> str:
-    """Update an existing lesson with consolidated content and new provenance."""
+    """Update an existing runtime lesson with consolidated content and provenance."""
     entry_id = require_str(args, "entry_id")
     existing = get_knowledge_store().get_entry(entry_id)
     if existing is None:

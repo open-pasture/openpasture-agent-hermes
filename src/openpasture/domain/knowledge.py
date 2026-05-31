@@ -18,6 +18,9 @@ class SourceRecord:
     source_author: str
     source_kind: str = "youtube"
     segment: str | None = None
+    transcript_repo: str | None = None
+    transcript_path: str | None = None
+    transcript_ref: str | None = None
 
 
 @dataclass(slots=True)
