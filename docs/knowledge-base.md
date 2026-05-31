@@ -6,6 +6,18 @@ The knowledge base is the agent's durable ancestral memory.
 
 `openPasture` should not rely only on generic model priors. It should reason with curated lessons from trusted practitioners and connect those lessons to the daily condition of a specific farm.
 
+## Canonical Storage
+
+Curated ancestral knowledge is stored as Markdown files in this repository. Those
+Markdown files are the source of truth an agent should edit, review, and commit.
+Runtime databases, embeddings, and search indexes are generated artifacts built
+from the Markdown corpus; they are useful for retrieval but are not the durable
+knowledge base.
+
+Raw transcripts should not be committed here. For YouTube ingestion, store the
+raw transcript in the transcript repository and include a reference to that
+transcript in the knowledge Markdown frontmatter.
+
 ## Source Types
 
 The first ingestion focus is YouTube transcripts from trusted rotational and regenerative grazing practitioners.
@@ -35,10 +47,10 @@ The initial types are:
 ```mermaid
 flowchart LR
     Source[SourceURL] --> Transcript[TranscriptAcquisition]
-    Transcript --> Extraction[LessonExtraction]
-    Extraction --> Embedding[EmbeddingGeneration]
-    Embedding --> Storage[KnowledgeStorage]
-    Storage --> Retrieval[RetrievalAtPlanTime]
+    Transcript --> TranscriptRepo[TranscriptRepo]
+    TranscriptRepo --> Markdown[KnowledgeMarkdown]
+    Markdown --> Embedding[EmbeddingGeneration]
+    Embedding --> Retrieval[RetrievalAtPlanTime]
 ```
 
 ## Retrieval During Planning
@@ -49,7 +61,7 @@ The result should ground recommendations in explicit lessons and make the reason
 
 ## Seed Knowledge
 
-The repository includes starter knowledge based on cross-cutting principles and named practitioners. This seed exists to make the first local test useful before a farmer adds their own sources.
+The repository includes starter knowledge based on cross-cutting principles and named practitioners. This seed exists to make the first local test useful before a farmer adds their own sources. Starter lessons should follow the same Markdown format as newly ingested knowledge.
 
 ## Batch Operations
 

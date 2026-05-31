@@ -67,7 +67,7 @@ Keep the repository split clear:
 - `src/openpasture/domain/`: pure domain primitives with no framework coupling.
 - `src/openpasture/tools/`: dict-in, JSON-out farm tools.
 - `src/openpasture/store/`: storage protocols plus backend implementations.
-- `src/openpasture/knowledge/`: extraction, embeddings, retrieval, and ingestion batches.
+- `src/openpasture/knowledge/`: Markdown seed loading, extraction, embeddings, retrieval, and ingestion batches.
 - `src/openpasture/ingestion/`: weather, satellite, photo, and vendor pipelines.
 - `src/openpasture/briefing/`: farm context assembly, default advisor, and scheduling.
 - `skills/`: portable operational runbooks.
@@ -81,6 +81,7 @@ Keep the repository split clear:
 - Keep domain objects framework-agnostic.
 - Prefer plain language and farmer legibility over clever abstractions.
 - Treat skills as portable curriculum, not runtime-specific artifacts.
+- Treat curated ancestral knowledge Markdown in `seed/knowledge/` as the durable source of truth; generated databases and indexes are runtime artifacts.
 - Avoid speculative UI-first abstractions in this repository.
 
 ## Domain Glossary

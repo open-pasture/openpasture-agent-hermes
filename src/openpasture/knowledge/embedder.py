@@ -40,6 +40,9 @@ class KnowledgeEmbedder:
                     "source_author": source.source_author,
                     "source_kind": source.source_kind,
                     "segment": source.segment,
+                    "transcript_repo": source.transcript_repo,
+                    "transcript_path": source.transcript_path,
+                    "transcript_ref": source.transcript_ref,
                 }
                 for source in entry.sources
             ],
@@ -65,6 +68,9 @@ class KnowledgeEmbedder:
                     source_author=str(source.get("source_author", "")),
                     source_kind=str(source.get("source_kind", "seed")),
                     segment=str(source["segment"]) if source.get("segment") is not None else None,
+                    transcript_repo=str(source["transcript_repo"]) if source.get("transcript_repo") is not None else None,
+                    transcript_path=str(source["transcript_path"]) if source.get("transcript_path") is not None else None,
+                    transcript_ref=str(source["transcript_ref"]) if source.get("transcript_ref") is not None else None,
                 )
                 for source in raw_sources
                 if isinstance(source, dict)

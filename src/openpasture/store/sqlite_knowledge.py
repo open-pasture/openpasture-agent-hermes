@@ -37,6 +37,9 @@ def _source_to_dict(source: SourceRecord) -> dict[str, object]:
         "source_author": source.source_author,
         "source_kind": source.source_kind,
         "segment": source.segment,
+        "transcript_repo": source.transcript_repo,
+        "transcript_path": source.transcript_path,
+        "transcript_ref": source.transcript_ref,
     }
 
 
@@ -47,6 +50,9 @@ def _source_from_dict(payload: dict[str, object]) -> SourceRecord:
         source_author=str(payload.get("source_author", "")),
         source_kind=str(payload.get("source_kind", "seed")),
         segment=str(payload["segment"]) if payload.get("segment") is not None else None,
+        transcript_repo=str(payload["transcript_repo"]) if payload.get("transcript_repo") is not None else None,
+        transcript_path=str(payload["transcript_path"]) if payload.get("transcript_path") is not None else None,
+        transcript_ref=str(payload["transcript_ref"]) if payload.get("transcript_ref") is not None else None,
     )
 
 
